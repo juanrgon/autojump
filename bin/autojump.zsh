@@ -81,6 +81,35 @@ jc() {
 }
 
 
+# open autojump results in editor
+je () {
+	export EDITOR=$EDITOR
+	if [[ ${1} == -* ]] && [[ ${1} != "--" ]]
+	then
+		autojump ${@}
+		return
+	fi
+	setopt localoptions noautonamedirs
+	local output="$(autojump ${@})"
+	if [[ -d "${output}" ]]
+	then
+		case ${OSTYPE} in
+			(linux*) $EDITOR "${output}" ;;
+			(darwin*) $EDITOR "${output}" ;;
+			(cygwin) cygstart "" $(cygpath -w -a ${output}) ;;
+			(*) echo "Unknown operating system: ${OSTYPE}" >&2 ;;
+		esac
+	else
+		echo "autojump: directory '${@}' not found"
+		echo "
+${output}
+"
+		echo "Try \`autojump --help\` for more information."
+		false
+	fi
+}
+
+
 # open autojump results in file browser
 jo() {
     if [[ ${1} == -* ]] && [[ ${1} != "--" ]]; then
