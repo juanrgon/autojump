@@ -45,6 +45,8 @@ end
 # default autojump command
 function j
     switch "$argv"
+        case $HOME
+            autojump $HOME
         case '-*' '--*'
             autojump $argv
         case '*'

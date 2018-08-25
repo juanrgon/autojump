@@ -54,6 +54,11 @@ esac
 
 # default autojump command
 j() {
+    if [[ ${1} == $HOME ]]; then
+        cd $HOME
+        return
+    fi
+
     if [[ ${1} == -* ]] && [[ ${1} != "--" ]]; then
         autojump ${@}
         return
